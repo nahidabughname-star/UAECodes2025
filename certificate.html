@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شهادة مشاركة - الإمارات تبرمج</title>
+    <style>
+        /* ---------------------------------- */
+        /* تنسيقات CSS لضمان التمركز والمظهر */
+        /* ---------------------------------- */
+        body {
+            background-color: #f4f4f4;
+            text-align: center;
+            font-family: 'Tahoma', sans-serif;
+            padding: 20px;
+        }
+
+        .input-area {
+            margin: 30px auto;
+        }
+
+        #name-input {
+            padding: 12px;
+            font-size: 20px;
+            width: 350px;
+            text-align: right;
+            border: 2px solid #D50032; /* الأحمر الإماراتي */
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #0073B7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #005A91;
+        }
+
+        .certificate-container {
+            position: relative;
+            max-width: 800px;
+            margin: 40px auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #certificate-template {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        #name-display {
+            position: absolute;
+            /* تم ضبط الموقع بناءً على القالب */
+            top: 55%; 
+            left: 50%;
+            transform: translate(-50%, -50%); 
+            
+            font-size: 38px; 
+            font-weight: 700;
+            color: #004A9A; /* لون نص مميز */
+            width: 90%; 
+            text-align: center;
+            direction: rtl;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="input-area">
+        <h2>أدخل اسمك لتظهر شهادة مشاركتك:</h2>
+        <input type="text" id="name-input" placeholder="الاسم الثلاثي هنا" maxlength="50" />
+        <button onclick="downloadCertificate()">تحميل الشهادة الآن</button>
+    </div>
+
+    <div class="certificate-container">
+        <img id="certificate-template" src="https://i.ibb.co/ymZCR5B6/image.jpg" alt="شهادة مشاركة يوم الإمارات تبرمج" />
+        
+        <span id="name-display">الاسم كاملاً هنا...</span>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    <script>
+        // ----------------------------------
+        // أكواد JavaScript للتفاعلية والتحميل
+        // ----------------------------------
+        
+        // A. تحديث الاسم فوراً أثناء الكتابة
+        document.getElementById('name-input').addEventListener('input', function() {
+            const nameDisplay = document.getElementById('name-display');
+            const inputName = this.value.trim();
+            
+            nameDisplay.textContent = inputName || 'الاسم كاملاً هنا...';
+        });
+
+        // B. وظيفة تحميل الشهادة كصورة (تستخدم html2canvas)
+        function downloadCertificate() {
+            // إخفاء منطقة الإدخال قبل التصوير
+            const inputArea = document.querySelector('.input-area');
+            inputArea.style.display = 'none';
+            
+            const certificateContainer = document.querySelector('.certificate-container'); 
+
+            html2canvas(certificateContainer, { 
+                allowTaint: true,
+                useCORS: true 
+            }).then(function(canvas) {
+                // إظهار منطقة الإدخال مرة أخرى بعد الانتهاء
+                inputArea.style.display = 'block';
+
+                // إنشاء رابط تنزيل للشهادة
+                const name = document.getElementById('name-input').value || 'مشارك';
+                const link = document.createElement('a');
+                link.download = `شهادة_مشاركة_${name.replace(/\s/g, '_')}_اليوم_الوطني.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
